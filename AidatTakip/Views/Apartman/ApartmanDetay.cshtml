@@ -1,0 +1,368 @@
+﻿@using AidatTakip.ViewModels
+@model ApartmanDetayViewModel
+@{
+    ViewData["Title"] = "ApartmanDetay";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form id="apartmanGuncelle">
+    <input type="hidden" name="Id" value="@Model.Apartman.Id" />
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body row">
+                    <div class="col-md-3 text-center">
+                        <img src="@Url.Content("~/AdminLayout/images/users/8.jpg")" class="rounded-circle" alt="">
+                        <h5 class="mt-3 mb-1">@Model.Apartman.Ad</h5>
+                        <p class="m-0">Apartman Görseli</p>
+                    </div>
+                    
+
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="Ad">Apartman Adı</label>
+                            <input type="text" class="form-control" id="Ad" name="Ad" value="@Model.Apartman.Ad"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="Il">Site</label>
+                            <select class="form-control" id="Site" name="SiteId" required
+                                    oninvalid="this.setCustomValidity('Site alanı boş bırakılamaz')"
+                                    oninput="this.setCustomValidity('')">
+                                <option value="">-- Site seçiniz --</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Güncelle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<hr />
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">Daireler</h4>
+                    <div class="d-flex ms-auto">
+                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalAidatEkle">
+                            <i class="fa fa-plus"></i> Toplu Aidat Ekle
+                        </button>
+                        <button class="btn btn-success btn-sm ml-2" data-toggle="modal" data-target="#modalDaireEkle">
+                            <i class="fa fa-plus"></i> Daire Ekle
+                        </button>
+                    </div>
+
+                </div>
+                <table id="dataTableTr" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Sorumlu</th>
+                            <th>Sorumlu Adı</th>
+                            <th>Kapı Numarası</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var daire in Model.Daireler)
+                        {
+                            <tr>
+                                <td>@daire.Id</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="@Url.Content(daire.SorumluImage)"
+                                             class="rounded-circle img-fluid"
+                                             style="max-width: 48px; height: auto;"
+                                             alt="Sorumlu Görseli" />
+                                    </div>
+                                </td>
+                                <td>@daire.DaireSorumlu</td>
+                                <td>@daire.No</td>
+                                
+                                <td>
+                                    <a href="javascript:void(0);"
+                                       class="btn btn-primary btn-sm btn-detay"
+                                       data-id="@daire.Id"
+                                       data-no="@daire.No"
+                                       data-sorumlu="@daire.DaireSorumlu"
+                                       data-tel="@daire.SorumluTel"
+                                       data-apartmanid="@daire.ApartmanId">
+                                       Detay</a>
+                                    <a class="btn btn-danger btn-sm btn-sil" data-id="@daire.Id">Sil</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalDaireEkle" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="modalDaireEkleLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDaireEkleLabel">Yeni Daire Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form id="yeniDaireEkle" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="No">Daire Numarası</label>
+                        <input type="text" class="form-control" id="No" name="No" required
+                               oninvalid="this.setCustomValidity('Daire numarası boş bırakılamaz')"
+                               oninput="this.setCustomValidity('')" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DaireSorumlu">Sorumlu Adı</label>
+                        <input type="text" class="form-control" id="DaireSorumlu" name="DaireSorumlu" required
+                               oninvalid="this.setCustomValidity('Sorumlu adı boş bırakılamaz')"
+                               oninput="this.setCustomValidity('')" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SorumluTel">Telefon</label>
+                        <input type="tel" class="form-control" id="SorumluTel" name="SorumluTel" required
+                               oninvalid="this.setCustomValidity('Telefon alanı boş bırakılamaz')"
+                               oninput="this.setCustomValidity('')" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="SorumluImage">Sorumlu Görseli</label>
+                        <input type="file" class="form-control" id="SorumluImage" name="filePath" accept="image/*"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ApartmanId">Apartman</label>
+                        <select class="form-control" id="Apartman" name="ApartmanId" required
+                                oninvalid="this.setCustomValidity('Apartman seçilmeden gönderilemez')"
+                                oninput="this.setCustomValidity('')">
+                            <option value="">-- Apartman seçiniz --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="modalAidatEkle" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalAidatEkleLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDaireEkleLabel">Yeni Aidat Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form id="yeniAidatEkle">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="Tutar">Tutar</label>
+                        <input type="text" class="form-control" id="Tutar" name="Tutar" required
+                               oninvalid="this.setCustomValidity('Tutar boş bırakılamaz')"
+                               oninput="this.setCustomValidity('')" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('.btn-detay').on('click', function () {
+            const id = $(this).data('id');
+            const no = $(this).data('no');
+            const sorumlu = $(this).data('sorumlu');
+            const tel = $(this).data('tel');
+            const apartmanId = $(this).data('apartmanid');
+
+            // input'lara değerleri ata
+            $('#No').val(no);
+            $('#DaireSorumlu').val(sorumlu);
+            $('#SorumluTel').val(tel);
+            $('#Apartman').val(apartmanId);
+
+            // gizli input olarak ID ekle (güncellemede lazım olur)
+            if ($('#DaireId').length === 0) {
+                $('#yeniDaireEkle').prepend('<input type="hidden" id="DaireId" name="Id" />');
+            }
+            $('#DaireId').val(id);
+
+            // modalı aç
+            $('#modalDaireEkle').modal('show');
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#yeniDaireEkle').on('submit', function (e) {
+            e.preventDefault();
+
+            const form = document.getElementById('yeniDaireEkle');
+            const formData = new FormData(form);
+
+            $.ajax({
+                type: 'POST',
+                url: '/Daire/Ekle',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'İşlem Başarılı',
+                        text: response.message,
+                        confirmButtonText: 'Tamam'
+                    }).then(() => {
+                        $('#modalDaireEkle').modal('hide');
+                        location.reload();
+                    });  
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Daire ekleme/güncelleme işlemi sırasında bir hata oluştu'
+                    });
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#apartmanGuncelle').on('submit', function (e) {
+            e.preventDefault();
+
+            const formData = $(this).serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Apartman/Ekle',
+                data: formData,
+                success: function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Güncelleme Başarılı',
+                        text: 'Apartman bilgileri güncellendi.',
+                        confirmButtonText: 'Tamam'
+                    });
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Güncelleme işlemi sırasında bir hata oluştu.'
+                    });
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Site/SiteListesi',
+            type: 'GET',
+            success: function (data) {
+                var select = $('#Site');
+                $.each(data, function (index, site) {
+                    select.append($('<option>', {
+                        value: site.id,       // ID formda gönderilecek
+                        text: site.ad         // Görünen metin
+                    }));
+                });
+            },
+            error: function () {
+                alert("Site listesi yüklenemedi.");
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Apartman/ApartmanListesi',
+            type: 'GET',
+            success: function (data) {
+                var select = $('#Apartman');
+                $.each(data, function (index, apartman) {
+                    select.append($('<option>', {
+                        value: apartman.id,       // ID formda gönderilecek
+                        text: apartman.ad         // Görünen metin
+                    }));
+                });
+            },
+            error: function () {
+                alert("Site listesi yüklenemedi.");
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.btn-sil').on('click', function (e) {
+            e.preventDefault();
+
+            const daireId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu daire kalıcı olarak silinecek!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Evet, sil',
+                cancelButtonText: 'Vazgeç'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                       $.ajax({
+                        type: 'POST',
+                        url: '/Daire/Sil',
+                        data: { daireId: daireId },
+                        success: function (response) {
+                            Swal.fire('Silindi!', response.message, 'success')
+                                .then(() => location.reload());
+                        },
+                        error: function () {
+                            Swal.fire('Hata', 'Silme işlemi başarısız.', 'error');
+                        }
+                    });
+
+                }
+            });
+        });
+    });
+</script>
+
+
+

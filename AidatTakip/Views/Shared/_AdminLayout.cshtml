@@ -1,0 +1,51 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    @await Html.PartialAsync("~/Views/Partials/_Links.cshtml")
+</head>
+
+<body>
+
+    @await Html.PartialAsync("~/Views/Partials/_Preloader.cshtml")
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        @await Html.PartialAsync("~/Views/Partials/_Navheader.cshtml")
+        @await Html.PartialAsync("~/Views/Partials/_Header.cshtml")
+        @await Html.PartialAsync("~/Views/Partials/_Sidebar.cshtml")
+        
+        <div class="content-body">
+
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Home</a></li>
+                    </ol>
+                </div>
+            </div>
+            <!-- row -->
+            
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            <!-- #/ container -->
+        </div>
+        @await Html.PartialAsync("~/Views/Partials/_Footer.cshtml")
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+    @await Html.PartialAsync("~/Views/Partials/_Scripts.cshtml")
+
+</body>
+
+</html>
+
